@@ -1,9 +1,9 @@
 import java.awt.*;
-public class Weapon implements IWeapon {
 
+public class WeaponDifferentForm1 implements IWeapon {
     private WeaponAmount weaponAmount;
 
-    public Weapon(int amount)
+    public WeaponDifferentForm1(int amount)
     {
         SetWeaponAmount(amount);
     }
@@ -18,11 +18,11 @@ public class Weapon implements IWeapon {
         g.setColor(color);
         switch (weaponAmount) {
             case One:
-                g.fillRect(x + 80, y + 10, 40, 5);
+                g.fillRect(x + 80, y + 10, 5, 5);
             case Two:
-                g.fillRect(x, y + 10, 40, 5);
+                g.fillRect(x, y + 20, 5, 5);
             case Three:
-                g.fillRect(x + 80, y + 20, 40, 5);
+                g.fillRect(x + 80, y + 20, 5, 5);
                 break;
         }
     }
