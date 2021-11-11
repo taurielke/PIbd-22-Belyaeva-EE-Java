@@ -5,7 +5,8 @@ import java.util.Random;
 
 public class FrameTank extends JFrame{
     private JPanel panelTank;
-    private Tank tank;
+
+    private ITransport armoredCar;
 
     public static void main(String[] args)
     {
@@ -32,50 +33,59 @@ public class FrameTank extends JFrame{
         Icon down = new ImageIcon("D:\\Java\\down.jpg");
         Icon right = new ImageIcon("D:\\Java\\right.jpg");
 
-        JButton btnCreate = new JButton("Создать");
+        JButton btnCreateArmoredCar = new JButton("Создать бронированную машину");
+        JButton btnCreateTank = new JButton("Создать танк");
         JButton btnUp = new JButton(up);
         JButton btnDown = new JButton(down);
         JButton btnLeft = new JButton(left);
         JButton btnRight = new JButton(right);
 
-        btnCreate.setBounds(12, 12, 91, 39);
+        btnCreateArmoredCar.setBounds(12, 12, 273, 48);
+        btnCreateTank.setBounds(304, 12, 154, 47);
         btnUp.setBounds(1048, 513, 70, 70);
         btnDown.setBounds(1048, 589, 70, 70);
         btnLeft.setBounds(972, 589, 70, 70);
         btnRight.setBounds(1124, 589, 70, 70);
 
-        panelTank.add(btnCreate);
+        panelTank.add(btnCreateArmoredCar);
+        panelTank.add(btnCreateTank);
         panelTank.add(btnUp);
         panelTank.add(btnDown);
         panelTank.add(btnLeft);
         panelTank.add(btnRight);
 
-        btnCreate.addActionListener(e -> {
+        btnCreateArmoredCar.addActionListener(e -> {
             Random rnd = new Random();
-            tank = new Tank();
+            armoredCar = new ArmoredCar(rnd.nextInt(200) + 100, rnd.nextInt(1000)+1000, Color.BLACK);
+            armoredCar.SetPosition(rnd.nextInt(100)+100, rnd.nextInt(100)+100, panelTank.getWidth(), panelTank.getHeight());
+            repaint();
+        });
+
+        btnCreateTank.addActionListener(e -> {
+            Random rnd = new Random();
             int weaponAmount = rnd.nextInt(3)+1;
-            tank.Init(rnd.nextInt(200) + 100, rnd.nextInt(1000)+1000, Color.BLACK, Color.GREEN, true,  weaponAmount);
-            tank.SetPosition(rnd.nextInt(100)+50, rnd.nextInt(100)+50, panelTank.getWidth(), panelTank.getHeight());
+            armoredCar = new Tank(rnd.nextInt(200) + 100, rnd.nextInt(1000)+1000, Color.BLACK, Color.GREEN, true,  weaponAmount);
+            armoredCar.SetPosition(rnd.nextInt(100)+100, rnd.nextInt(100)+100, panelTank.getWidth(), panelTank.getHeight());
             repaint();
         });
 
         btnUp.addActionListener(e ->{
-            tank.MoveTransport(Direction.Up);
+            armoredCar.MoveTransport(Direction.Up);
             repaint();
         });
 
         btnDown.addActionListener(e ->{
-            tank.MoveTransport(Direction.Down);
+            armoredCar.MoveTransport(Direction.Down);
             repaint();
         });
 
         btnLeft.addActionListener(e ->{
-            tank.MoveTransport(Direction.Left);
+            armoredCar.MoveTransport(Direction.Left);
             repaint();
         });
 
         btnRight.addActionListener(e ->{
-            tank.MoveTransport(Direction.Right);
+            armoredCar.MoveTransport(Direction.Right);
             repaint();
         });
     }
@@ -83,8 +93,8 @@ public class FrameTank extends JFrame{
     public void paint(Graphics g)
     {
         super.paint(g);
-        if(tank != null)
-            tank.DrawTransport(g);
+        if(armoredCar != null)
+            armoredCar.DrawTransport(g);
     }
 
     public void repaint()

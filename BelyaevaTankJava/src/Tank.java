@@ -1,47 +1,12 @@
 import java.awt.*;
+import java.util.Random;
 
-public class Tank
+public class Tank extends ArmoredCar
 {
-    private int _startPosX;
-    private int _startPosY;
-    private int _pictureWidth;
-    private int _pictureHeight;
-    private final int tankWidth = 120;
-    private final int tankHeight = 60;
-    private Weapon weaponAmount;
-
-    public int MaxSpeed;
-    public float Weight;
-    public Color MainColor;
     public Color DopColor;
     public boolean Tower;
-
-    private void SetMaxSpeed(int maxSpeed)
-    {
-        MaxSpeed = maxSpeed;
-    }
-    public int GetMaxSpeed()
-    {
-        return MaxSpeed;
-    }
-
-    private void SetWeight(int weight)
-    {
-        Weight = weight;
-    }
-    public float GetWeight()
-    {
-        return Weight;
-    }
-
-    private void SetMainColor(Color mainColor)
-    {
-        MainColor = mainColor;
-    }
-    public Color GetMainColor()
-    {
-        return MainColor;
-    }
+    private IWeapon WeaponType;
+    private int weaponAmount;
 
     private void SetDopColor(Color dopColor)
     {
@@ -61,55 +26,26 @@ public class Tank
         return Tower;
     }
 
-    public void Init(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean tower, int weaponAmount)
+    public Tank(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean tower, int weaponAmount)
     {
-        MaxSpeed = maxSpeed;
-        Weight = weight;
-        MainColor = mainColor;
+        super(maxSpeed, weight, mainColor, 120, 60);
         DopColor = dopColor;
         Tower = tower;
-        this.weaponAmount = new Weapon(weaponAmount);
+        this.weaponAmount = weaponAmount;
+        GetWeaponType();
     }
 
-    public void SetPosition(int x, int y, int width, int height)
-    {
-        _startPosX = x;
-        _startPosY = y;
-        _pictureWidth = width;
-        _pictureHeight = height;
-    }
-
-    public void MoveTransport(Direction direction)
-    {
-        float step = MaxSpeed * 100 / Weight;
-        switch (direction) {
-            case Right:
-                if (_startPosX + step < _pictureWidth - tankWidth)
-                {
-                    _startPosX += step;
-                }
-                break;
-
-            case Left:
-                if (_startPosX - step > 0)
-                {
-                    _startPosX -= step;
-                }
-                break;
-
-            case Up:
-                if (_startPosY - step*3 > 0)
-                {
-                    _startPosY -= step;
-                }
-                break;
-
-            case Down:
-                if (_startPosY + step < _pictureHeight - tankHeight)
-                {
-                    _startPosY += step;
-                }
-                break;
+    private void GetWeaponType(){
+        Random rnd = new Random();
+        int weaponType = rnd.nextInt(3)+1;
+        if (weaponType == 1) {
+            WeaponType = new Weapon(weaponAmount);
+        }
+        if (weaponType == 2) {
+            WeaponType = new WeaponDifferentForm1(weaponAmount);
+        }
+        if (weaponType == 3){
+            WeaponType = new WeaponDifferentForm2(weaponAmount);
         }
     }
 
@@ -144,6 +80,6 @@ public class Tank
         //additional part for upper parts
         g.fillRect(_startPosX+40, _startPosY+15, 30, 10);
 
-        weaponAmount.Draw(g, Color.GREEN, _startPosX, _startPosY);
+        WeaponType.DrawWeapons(g, Color.GREEN, _startPosX, _startPosY);
     }
 }
