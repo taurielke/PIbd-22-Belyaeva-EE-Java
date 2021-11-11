@@ -5,7 +5,6 @@ import java.util.Random;
 
 public class FrameTank extends JFrame{
     private JPanel panelTank;
-
     private ITransport armoredCar;
 
     public static void main(String[] args)
@@ -20,7 +19,7 @@ public class FrameTank extends JFrame{
         super("Танк");
 
         setSize(1219, 721);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
 
         panelTank = new JPanel();
@@ -100,5 +99,13 @@ public class FrameTank extends JFrame{
     public void repaint()
     {
         super.repaint();
+    }
+
+    public void SetArmoredCar(ITransport armoredCar)
+    {
+        Random rnd = new Random();
+        this.armoredCar = armoredCar;
+        armoredCar.SetPosition(rnd.nextInt(100)+100, rnd.nextInt(100)+100, panelTank.getWidth(), panelTank.getHeight());
+        repaint();
     }
 }
