@@ -17,6 +17,8 @@ public class Weapon implements IWeapon {
     {
         g.setColor(color);
         switch (weaponAmount) {
+            case Zero:
+                break;
             case One:
                 g.fillRect(x + 80, y + 10, 40, 5);
             case Two:

@@ -17,6 +17,8 @@ public class WeaponDifferentForm1 implements IWeapon {
     {
         g.setColor(color);
         switch (weaponAmount) {
+            case Zero:
+                break;
             case One:
                 g.fillRect(x + 80, y + 10, 5, 5);
             case Two:

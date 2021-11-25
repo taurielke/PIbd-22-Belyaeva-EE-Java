@@ -1,4 +1,3 @@
-import java.awt.EventQueue;
 import java.awt.*;
 import javax.swing.*;
 import java.util.Random;
@@ -6,14 +5,6 @@ import java.util.Random;
 public class FrameTank extends JFrame{
     private JPanel panelTank;
     private ITransport armoredCar;
-
-    public static void main(String[] args)
-    {
-        EventQueue.invokeLater(() -> {
-            FrameTank frameTank = new FrameTank();
-            frameTank.setVisible(true);
-        } );
-    }
 
     public FrameTank(){
         super("Танк");
@@ -63,7 +54,7 @@ public class FrameTank extends JFrame{
         btnCreateTank.addActionListener(e -> {
             Random rnd = new Random();
             int weaponAmount = rnd.nextInt(3)+1;
-            armoredCar = new Tank(rnd.nextInt(200) + 100, rnd.nextInt(1000)+1000, Color.BLACK, Color.GREEN, true,  weaponAmount);
+            armoredCar = new Tank(rnd.nextInt(200) + 100, rnd.nextInt(1000)+1000, Color.BLACK, Color.GREEN, true,  new Weapon(weaponAmount));
             armoredCar.SetPosition(rnd.nextInt(100)+100, rnd.nextInt(100)+100, panelTank.getWidth(), panelTank.getHeight());
             repaint();
         });

@@ -9,8 +9,7 @@ import java.util.Queue;
 public class FrameBase extends JFrame {
     private JPanel panelBase;
     private JPanel panelBaseParkVehicles;
-    private JButton btnParkArmoredCar;
-    private JButton btnParkTank;
+    private JButton btnParkVehicle;
     private JButton btnTakeAwayVehicle;
     private JPanel panelTakeAwayVehicle;
     private JLabel labelPlace;
@@ -37,9 +36,6 @@ public class FrameBase extends JFrame {
 
     public FrameBase(){
         super("База");
-
-        queueDeletedVehicles = new LinkedList<Vehicle>();
-
         setSize(1219, 721);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -50,12 +46,13 @@ public class FrameBase extends JFrame {
         panelBaseParkVehicles.setBounds(5,5,1000,721);
         setContentPane(panelBase);
         panelBase.setLayout(null);
-
+        queueDeletedVehicles = new LinkedList<Vehicle>();
         baseCollection = new BaseCollection(panelBaseParkVehicles.getWidth(), panelBaseParkVehicles.getHeight());
 
         defListBases = new DefaultListModel<String>();
         jListBases = new JList<String>(defListBases);
         scroll = new JScrollPane(jListBases);
+
         textFieldNewLevelName = new JTextField();
         btnAddBase = new JButton("Добавить базу");
         btnDelBase = new JButton("Удалить базу");
@@ -64,6 +61,7 @@ public class FrameBase extends JFrame {
         scroll.setBounds(1017, 103, 164,124);
         jListBases.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListBases.addListSelectionListener(new jListSelectedIndexChanged());
+
         textFieldNewLevelName.setColumns(5);
         textFieldNewLevelName.setBounds(1017, 32, 160, 26);
         btnAddBase.setBounds(1017,64,164,33);
@@ -71,27 +69,25 @@ public class FrameBase extends JFrame {
         btnShowDelVehicle.setBounds(1017, 645, 160,37);
 
         panelBase.add(scroll);
+
         panelBase.add(textFieldNewLevelName);
         panelBase.add(btnAddBase);
         panelBase.add(btnDelBase);
         panelBase.add(btnShowDelVehicle);
 
-        btnParkArmoredCar = new JButton("Припарковать бм");
-        btnParkTank = new JButton("Припарковать танк");
+        btnParkVehicle = new JButton("<html>Припарковать <br> транспорт");
         btnTakeAwayVehicle = new JButton("Забрать");
         panelTakeAwayVehicle = new JPanel();
         labelPlace = new JLabel("Место: ");
         textFieldPlaceNumber = new JTextField();
         textFieldPlaceNumber.setColumns(5);
-        btnParkArmoredCar.setBounds(1017,367,160,88);
-        btnParkTank.setBounds(1017, 461,160,69);
+        btnParkVehicle.setBounds(1017,450,160,88);
         panelTakeAwayVehicle.setBounds(1017, 546,160,100);
         labelPlace.setBounds(19,69,61,20);
         textFieldPlaceNumber.setBounds(86,63,58,26);
         btnTakeAwayVehicle.setBounds(23,117,121,34);
 
-        panelBase.add(btnParkArmoredCar);
-        panelBase.add(btnParkTank);
+        panelBase.add(btnParkVehicle);
         panelBase.add(panelTakeAwayVehicle);
         panelBase.add(panelBaseParkVehicles);
         panelTakeAwayVehicle.add(labelPlace);
@@ -136,36 +132,11 @@ public class FrameBase extends JFrame {
             }
         });
 
-        btnParkArmoredCar.addActionListener(e -> {
+        btnParkVehicle.addActionListener(e -> {
             if(jListBases.getSelectedIndex() > -1)
             {
-                Color firstColor = JColorChooser.showDialog(null, "Выберите цвет", Color.BLACK);
-                vehicle = new ArmoredCar(100,1000, firstColor);
-                if((baseCollection.getBase(jListBases.getSelectedValue()).Plus(vehicle))!=-1)
-                {
-                    repaint();
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "База переполнена");
-                }
-            }
-        });
-
-        btnParkTank.addActionListener(e -> {
-            if(jListBases.getSelectedIndex() > -1)
-            {
-                Color firstColor = JColorChooser.showDialog(null, "Выберите цвет", Color.BLACK);
-                Color secondColor = JColorChooser.showDialog(null, "Выберите цвет", Color.BLACK);
-                vehicle = new Tank(100,1000, firstColor, secondColor, true, 1);
-                if((baseCollection.getBase(jListBases.getSelectedValue()).Plus(vehicle))!=-1)
-                {
-                    repaint();
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, "База переполнена");
-                }
+                FrameVehicleConfig fvc = new FrameVehicleConfig(this);
+                fvc.setVisible(true);
             }
         });
 
@@ -183,7 +154,6 @@ public class FrameBase extends JFrame {
                 }
                 repaint();
             }
-
         });
     }
 
@@ -205,6 +175,18 @@ public class FrameBase extends JFrame {
             {
                 jListBases.setSelectedIndex(index);
             }
+        }
+    }
+
+    public void addVehicle(Vehicle vehicle)
+    {
+        if((baseCollection.getBase(jListBases.getSelectedValue()).Plus(vehicle))!=-1)
+        {
+            repaint();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(null, "База переполнена");
         }
     }
 

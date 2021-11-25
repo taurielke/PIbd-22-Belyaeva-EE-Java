@@ -6,9 +6,8 @@ public class Tank extends ArmoredCar
     public Color DopColor;
     public boolean Tower;
     private IWeapon WeaponType;
-    private int weaponAmount;
 
-    private void SetDopColor(Color dopColor)
+    public void SetDopColor(Color dopColor)
     {
         DopColor = dopColor;
     }
@@ -26,27 +25,17 @@ public class Tank extends ArmoredCar
         return Tower;
     }
 
-    public Tank(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean tower, int weaponAmount)
+    public Tank(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean tower, IWeapon weaponType)
     {
         super(maxSpeed, weight, mainColor, 120, 60);
         DopColor = dopColor;
         Tower = tower;
-        this.weaponAmount = weaponAmount;
-        GetWeaponType();
+        WeaponType = weaponType;
     }
 
-    private void GetWeaponType(){
-        Random rnd = new Random();
-        int weaponType = rnd.nextInt(3)+1;
-        if (weaponType == 1) {
-            WeaponType = new Weapon(weaponAmount);
-        }
-        if (weaponType == 2) {
-            WeaponType = new WeaponDifferentForm1(weaponAmount);
-        }
-        if (weaponType == 3){
-            WeaponType = new WeaponDifferentForm2(weaponAmount);
-        }
+    public  void setWeaponType(IWeapon weaponType)
+    {
+        WeaponType = weaponType;
     }
 
     public void DrawTransport(Graphics g)
@@ -80,6 +69,6 @@ public class Tank extends ArmoredCar
         //additional part for upper parts
         g.fillRect(_startPosX+40, _startPosY+15, 30, 10);
 
-        WeaponType.DrawWeapons(g, Color.GREEN, _startPosX, _startPosY);
+        WeaponType.DrawWeapons(g, DopColor, _startPosX, _startPosY);
     }
 }
