@@ -1,57 +1,56 @@
 import java.awt.*;
 import javax.swing.*;
+import java.util.ArrayList;
+
 
 public class Base <T extends ITransport, U extends IWeapon>{
-    private T []_places;
+    private ArrayList<T> _places;
+    private int maxCount;
     private int pictureWidth;
     private int pictureHeight;
-    //size of a parking lot
     private final int _placeSizeWidth = 270;
     private final int _placeSizeHeight = 90;
     private int width;
     private int height;
 
+    public T getVehicle(int i)
+    {
+        if(i > -1 && i < _places.size())
+        {
+            return _places.get(i);
+        }
+        return null;
+    }
+
     public Base(int picWidth, int picHeight)
     {
         width = picWidth / _placeSizeWidth;//2
         height = picHeight / _placeSizeHeight;//5
-        _places = (T[])new ITransport [width * height];
+        _places = new ArrayList<T>();
+        maxCount = width*height;
         pictureHeight = picHeight;
         pictureWidth = picWidth;
     }
 
     public int Plus(T tank)
     {
-        int i = 0;
-        int j = 0;
-        while (i < height)
+        if(_places.size() < maxCount)
         {
-            j = 0;
-            while (j < width)
-            {
-                if (_places[i*width + j] == null)
-                {
-                    _places[i*width + j] = tank;
-                    tank.SetPosition(25 + j * _placeSizeWidth, 40 + i * _placeSizeHeight, pictureWidth, pictureHeight);
-                    return i*width + j;
-                }
-                j++;
-            }
-            i++;
+            _places.add(tank);
+            return 1;
         }
-        return -1;
+        else
+        {
+            return -1;
+        }
     }
 
     public T Minus(int index)
     {
-        if ((index >= width * height)||(_places[index] == null))
+        if ((index < _places.size())&&(index > -1))
         {
-            return null;
-        }
-        if (_places[index] != null)
-        {
-            T obj = _places[index];
-            _places[index] = null;
+            T obj = _places.get(index);
+            _places.remove(index);
             return obj;
         }
         else
@@ -62,21 +61,28 @@ public class Base <T extends ITransport, U extends IWeapon>{
 
     public boolean MoreOrEquals(Base<ITransport, IWeapon> base1, Base<ITransport, IWeapon> base2)
     {
-        return (base1._places.length >= base2._places.length);
+        return (base1._places.size() >= base2._places.size());
     }
 
     public boolean LessOrEquals(Base<ITransport, IWeapon> base1, Base<ITransport, IWeapon> base2)
     {
-        return (base1._places.length <= base2._places.length);
+        return (base1._places.size() <= base2._places.size());
     }
 
     public void Draw(Graphics g)
     {
         DrawMarking(g);
-        for (int i = 0; i < _places.length; i++)
+        int x = 25, y = 40;
+        for(int i = 0; i < _places.size(); ++i)
         {
-            if(_places[i]!=null)
-                _places[i].DrawTransport(g);
+            if(i % width == 0 && i > 0)
+            {
+                x = 20;
+                y += 90;
+            }
+            _places.get(i).SetPosition(x, y, pictureWidth, pictureHeight);
+            _places.get(i).DrawTransport(g);
+            x += 270;
         }
     }
 
