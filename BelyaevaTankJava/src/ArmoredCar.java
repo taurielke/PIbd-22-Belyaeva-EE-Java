@@ -2,21 +2,33 @@ import java.awt.*;
 public class ArmoredCar extends Vehicle {
     protected int tankWidth = 120;
     protected int tankHeight = 60;
+    protected String separator = ";";
 
-    public ArmoredCar(int maxSpeed, float weight, Color mainColor)
+    public ArmoredCar(int maxSpeed, int weight, Color mainColor)
     {
         MaxSpeed = maxSpeed;
         Weight = weight;
         MainColor = mainColor;
     }
 
-    protected ArmoredCar(int maxSpeed, float weight, Color mainColor, int tankWidth, int tankHeight)
+    protected ArmoredCar(int maxSpeed, int weight, Color mainColor, int tankWidth, int tankHeight)
     {
         MaxSpeed = maxSpeed;
         Weight = weight;
         MainColor = mainColor;
         this.tankWidth = tankWidth;
         this.tankHeight = tankHeight;
+    }
+    
+    public ArmoredCar(String info)
+    {
+        String[] strs = info.split(separator);
+        if(strs.length==3)
+        {
+            MaxSpeed = Integer.parseInt(strs[0]);
+            Weight = Integer.parseInt(strs[1]);
+            MainColor = Color.decode(strs[2]);
+        }
     }
 
     public void MoveTransport(Direction direction)
@@ -74,5 +86,10 @@ public class ArmoredCar extends Vehicle {
         g.setColor(Color.WHITE);
         //additional part for upper parts
         g.fillRect(_startPosX+40, _startPosY+15, 30, 10);
+    }
+
+    public String getArmoredCarConfig()
+    {
+        return MaxSpeed + separator + Weight + separator + MainColor.hashCode();
     }
 }

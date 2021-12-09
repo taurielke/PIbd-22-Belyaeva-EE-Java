@@ -5,7 +5,7 @@ public abstract class Vehicle implements ITransport {
     protected int _pictureWidth;
     protected int _pictureHeight;
     public int MaxSpeed;
-    public float Weight;
+    public int Weight;
     public Color MainColor;
 
     protected void SetMaxSpeed(int maxSpeed)
