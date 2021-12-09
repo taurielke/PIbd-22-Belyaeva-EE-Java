@@ -2,15 +2,27 @@ import java.awt.*;
 
 public class WeaponDifferentForm1 implements IWeapon {
     private WeaponAmount weaponAmount;
+    public int amount;
 
     public WeaponDifferentForm1(int amount)
     {
         SetWeaponAmount(amount);
+        this.amount = amount;
     }
 
     public void SetWeaponAmount(int amount)
     {
         weaponAmount = WeaponAmount.getWeaponAmount(amount);
+    }
+
+    public int GetWeaponAmount()
+    {
+        return amount;
+    }
+
+    public String GetWeaponTypeName()
+    {
+        return "WeaponDifferentForm1";
     }
 
     public void DrawWeapons(Graphics g, Color color, int x, int y)

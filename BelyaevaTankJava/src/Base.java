@@ -72,7 +72,7 @@ public class Base <T extends ITransport, U extends IWeapon>{
     public void Draw(Graphics g)
     {
         DrawMarking(g);
-        int x = 25, y = 40;
+        int x = 25, y = 70;
         for(int i = 0; i < _places.size(); ++i)
         {
             if(i % width == 0 && i > 0)
@@ -93,9 +93,14 @@ public class Base <T extends ITransport, U extends IWeapon>{
         {
             for (int j = 0; j < 6; j++)
             {
-                g.drawLine( i * _placeSizeWidth + 10, j * _placeSizeHeight + 35, i * _placeSizeWidth + 145, j * _placeSizeHeight + 35);
+                g.drawLine( i * _placeSizeWidth + 10, j * _placeSizeHeight + 65, i * _placeSizeWidth + 145, j * _placeSizeHeight + 65);
             }
-            g.drawLine( i * _placeSizeWidth + 10, 35, i * _placeSizeWidth + 10, 485);
+            g.drawLine( i * _placeSizeWidth + 10, 65, i * _placeSizeWidth + 10, 515);
         }
+    }
+
+    public void clear()
+    {
+        _places.clear();
     }
 }

@@ -15,7 +15,6 @@ public class FrameBase extends JFrame {
     private JLabel labelPlace;
     private JTextField textFieldPlaceNumber;
     private Vehicle vehicle;
-
     private BaseCollection baseCollection;
     private DefaultListModel<String> defListBases;
     private JList<String> jListBases;
@@ -25,6 +24,17 @@ public class FrameBase extends JFrame {
     private JButton btnDelBase;
     private JButton btnShowDelVehicle;
     private Queue<Vehicle> queueDeletedVehicles;
+
+    private JMenu jMenu;
+    private JMenuBar jMenuBar;
+    private JMenuItem jMenuItemSaveFile;
+    private JMenuItem jMenuItemLoadFile;
+    private JFileChooser jFileChooser;
+
+    private JMenu jMenuBase;
+    private JMenuItem jMenuItemSaveBase;
+    private JMenuItem jMenuItemLoadBase;
+
 
     public static void main(String[] args)
     {
@@ -36,7 +46,7 @@ public class FrameBase extends JFrame {
 
     public FrameBase(){
         super("База");
-        setSize(1219, 721);
+        setSize(1219, 800);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -48,33 +58,26 @@ public class FrameBase extends JFrame {
         panelBase.setLayout(null);
         queueDeletedVehicles = new LinkedList<Vehicle>();
         baseCollection = new BaseCollection(panelBaseParkVehicles.getWidth(), panelBaseParkVehicles.getHeight());
-
         defListBases = new DefaultListModel<String>();
         jListBases = new JList<String>(defListBases);
         scroll = new JScrollPane(jListBases);
-
         textFieldNewLevelName = new JTextField();
         btnAddBase = new JButton("Добавить базу");
         btnDelBase = new JButton("Удалить базу");
         btnShowDelVehicle = new JButton("Показать удаленное");
-
         scroll.setBounds(1017, 103, 164,124);
         jListBases.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         jListBases.addListSelectionListener(new jListSelectedIndexChanged());
-
         textFieldNewLevelName.setColumns(5);
         textFieldNewLevelName.setBounds(1017, 32, 160, 26);
         btnAddBase.setBounds(1017,64,164,33);
         btnDelBase.setBounds(1017,233,160,37);
         btnShowDelVehicle.setBounds(1017, 645, 160,37);
-
         panelBase.add(scroll);
-
         panelBase.add(textFieldNewLevelName);
         panelBase.add(btnAddBase);
         panelBase.add(btnDelBase);
         panelBase.add(btnShowDelVehicle);
-
         btnParkVehicle = new JButton("<html>Припарковать <br> транспорт");
         btnTakeAwayVehicle = new JButton("Забрать");
         panelTakeAwayVehicle = new JPanel();
@@ -86,7 +89,6 @@ public class FrameBase extends JFrame {
         labelPlace.setBounds(19,69,61,20);
         textFieldPlaceNumber.setBounds(86,63,58,26);
         btnTakeAwayVehicle.setBounds(23,117,121,34);
-
         panelBase.add(btnParkVehicle);
         panelBase.add(panelTakeAwayVehicle);
         panelBase.add(panelBaseParkVehicles);
@@ -94,6 +96,86 @@ public class FrameBase extends JFrame {
         panelTakeAwayVehicle.add(textFieldPlaceNumber);
         panelTakeAwayVehicle.add(btnTakeAwayVehicle);
         panelTakeAwayVehicle.setBorder(BorderFactory.createTitledBorder("Забрать машину"));
+
+        jMenuBar = new JMenuBar();
+        jMenu = new JMenu("Файл");
+        jMenuItemSaveFile = new JMenuItem("Сохранить");
+        jMenuItemLoadFile = new JMenuItem("Загрузить");
+        jFileChooser = new JFileChooser();
+
+        jMenuBase = new JMenu("База");
+        jMenuItemSaveBase = new JMenuItem("Сохранить");
+        jMenuItemLoadBase = new JMenuItem("Загрузить");
+
+        jMenu.add(jMenuItemLoadFile);
+        jMenu.add(jMenuItemSaveFile);
+
+        jMenuBase.add(jMenuItemSaveBase);
+        jMenuBase.add(jMenuItemLoadBase);
+
+        jMenuBar.add(jMenu);
+
+        jMenuBar.add(jMenuBase);
+
+        setJMenuBar(jMenuBar);
+
+        jMenuItemSaveFile.addActionListener(e->{
+            if(jFileChooser.showDialog(null, "Сохранить в файл") == jFileChooser.APPROVE_OPTION)
+            {
+                if(baseCollection.SaveData(jFileChooser.getSelectedFile()))
+                {
+                    JOptionPane.showMessageDialog(null, "Сохранение прошло успешно", "Результат", JOptionPane.WARNING_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Не сохранилось", "Результат", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        jMenuItemSaveBase.addActionListener(e->{
+            if(jFileChooser.showDialog(null, "Сохранить в файл") == jFileChooser.APPROVE_OPTION)
+            {
+                if(baseCollection.SaveBase(jFileChooser.getSelectedFile(), jListBases.getSelectedValue()))
+                {
+                    JOptionPane.showMessageDialog(null, "Сохранение прошло успешно", "Результат", JOptionPane.WARNING_MESSAGE);
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Не сохранилось", "Результат", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        jMenuItemLoadFile.addActionListener(e->{
+            if(jFileChooser.showDialog(null, "Загрузить из файла") == jFileChooser.APPROVE_OPTION)
+            {
+                if(baseCollection.LoadData(jFileChooser.getSelectedFile()))
+                {
+                    JOptionPane.showMessageDialog(null, "Загрузили", "Результат", JOptionPane.WARNING_MESSAGE);
+                    ReloadLevels();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Не загрузили", "Результат", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        jMenuItemLoadBase.addActionListener(e->{
+            if(jFileChooser.showDialog(null, "Загрузить из файла") == jFileChooser.APPROVE_OPTION)
+            {
+                if(baseCollection.LoadBase(jFileChooser.getSelectedFile()))
+                {
+                    JOptionPane.showMessageDialog(null, "Загрузили", "Результат", JOptionPane.WARNING_MESSAGE);
+                    ReloadLevels();
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(null, "Не загрузили", "Результат", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
         btnShowDelVehicle.addActionListener(e -> {
             if(!queueDeletedVehicles.isEmpty())

@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.Objects;
 import java.util.Random;
 
 public class Tank extends ArmoredCar
@@ -25,7 +26,12 @@ public class Tank extends ArmoredCar
         return Tower;
     }
 
-    public Tank(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean tower, IWeapon weaponType)
+    public IWeapon GetWeaponType()
+    {
+        return WeaponType;
+    }
+
+    public Tank(int maxSpeed, int weight, Color mainColor, Color dopColor, boolean tower, IWeapon weaponType)
     {
         super(maxSpeed, weight, mainColor, 120, 60);
         DopColor = dopColor;
@@ -33,7 +39,40 @@ public class Tank extends ArmoredCar
         WeaponType = weaponType;
     }
 
-    public  void setWeaponType(IWeapon weaponType)
+    public Tank(String info)
+    {
+        super(info);
+        String[] strs = info.split(separator);
+        if (strs.length == 7)
+        {
+            MaxSpeed = Integer.parseInt(strs[0]);
+            Weight = Integer.parseInt(strs[1]);
+            MainColor = Color.decode(strs[2]);
+            DopColor = Color.decode(strs[3]);
+            Tower = Boolean.parseBoolean(strs[4]);
+            if(Objects.equals(strs[5], "Weapon"))
+            {
+                WeaponType = new Weapon(Integer.parseInt(strs[6]));
+            }
+            if(Objects.equals(strs[5], "WeaponDifferentForm1"))
+            {
+                WeaponType = new WeaponDifferentForm1(Integer.parseInt(strs[6]));
+            }
+            if(Objects.equals(strs[5], "WeaponDifferentForm2"))
+            {
+                WeaponType = new WeaponDifferentForm2(Integer.parseInt(strs[6]));
+            }
+        }
+    }
+
+    public String GetTankConfig()
+    {
+        String weaponTypeString = "";
+        weaponTypeString = WeaponType.GetWeaponTypeName();
+        return(MaxSpeed + ";" + Weight + ";" + MainColor.getRGB() + ";" + DopColor.getRGB() + ";" + Tower + ";" + weaponTypeString + ";" + WeaponType.GetWeaponAmount());
+    }
+
+    public void setWeaponType(IWeapon weaponType)
     {
         WeaponType = weaponType;
     }
@@ -69,6 +108,10 @@ public class Tank extends ArmoredCar
         //additional part for upper parts
         g.fillRect(_startPosX+40, _startPosY+15, 30, 10);
 
-        WeaponType.DrawWeapons(g, DopColor, _startPosX, _startPosY);
+        if(WeaponType != null)
+        {
+            WeaponType.DrawWeapons(g, DopColor, _startPosX, _startPosY);
+        }
+
     }
 }
